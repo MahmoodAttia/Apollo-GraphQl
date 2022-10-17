@@ -2,7 +2,17 @@ const { products, categories, reviews } = require("./dummyData");
 
 const resolvers = {
   Query: {
-    products: (parent, args, context) => products,
+    products: (parent, { filter }, context) => {
+      let filteredProducts = products;
+      if (filter) {
+        if (filter.onSale === true) {
+          return (filteredProducts = filteredProducts.filter(
+            (product) => product.onSale
+          ));
+        }
+      }
+      return filteredProducts;
+    },
     product: (parent, args, context) => {
       const { id } = args;
       return products.find((product) => product.id === id);
