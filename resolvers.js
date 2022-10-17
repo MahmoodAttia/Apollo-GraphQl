@@ -1,5 +1,5 @@
 const { products, categories, reviews } = require("./dummyData");
-
+const { v4: uuid } = require("uuid");
 const resolvers = {
   Query: {
     products: (parent, { filter }, context) => {
@@ -41,6 +41,33 @@ const resolvers = {
     review: (parent, args, context) => {
       const productId = parent.id;
       return reviews.filter((review) => review.productId === productId);
+    },
+  },
+  Mutation: {
+    addCategory: (parent, { input }, context) => {
+      const { name } = input;
+      const newCategory = {
+        id: uuid(),
+        name,
+      };
+      categories.push(newCategory);
+      return newCategory;
+    },
+    addProduct: (parent, { input }, context) => {
+      const { name, description, quantity, price, image, onSale, categoryId } =
+        input;
+      const newProduct = {
+        id: uuid(),
+        name,
+        description,
+        quantity,
+        price,
+        image,
+        onSale,
+        categoryId,
+      };
+      products.push(newProduct);
+      return newProduct;
     },
   },
 };
